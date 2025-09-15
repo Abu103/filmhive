@@ -12,7 +12,7 @@
 	let inputValue = $state('');
 
 	function handleSearch() {
-		goto(`/search/${inputValue}`, { replaceState: false });
+		goto(`/search/${inputValue.replace(" ", "+")}`, { replaceState: false });
 		inputValue = ""
 	}
 </script>
@@ -40,10 +40,10 @@
 			/>
 	</div>
 	<ul class="hidden gap-4 lg:flex items-center">
-		<li>Home</li>
-		<li>Contact</li>
-		<li>About</li>
-		<li>Help</li>
+		<a href="/">Home</a>
+		<a href="/contact	">Contact</a>
+		<a href="/about">About</a>
+		<a href="/help">Help</a>
 		<Button onclick={toggleMode} variant="outline" size="icon">
 			<SunIcon
 				class="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 !transition-all dark:scale-0 dark:-rotate-90"

@@ -1,12 +1,13 @@
 <script>
 	import { CardTitle } from '$lib/components/ui/card';
 	import CardContent from '$lib/components/ui/card/card-content.svelte';
+	import CardDescription from '$lib/components/ui/card/card-description.svelte';
 	import Card from '$lib/components/ui/card/card.svelte';
 
 	export let data;
 	let { movies } = data;
 
-	// console.log(movies);
+	console.log(movies);
 </script>
 
 {#if movies.results.length === 0}
@@ -36,13 +37,29 @@
 							<img
 								src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
 								alt={movie.title}
-								loading="eager"
+								loading="lazy"
 								class="w-full max-w-[250px] rounded-md object-cover"
 							/>
 
 							<CardTitle class="mt-4 text-center   text-xl font-semibold break-words">
 								{movie.title}
 							</CardTitle>
+							<CardDescription>
+								<section class="text-md text-center">
+									<p>
+										Popularity:
+										<strong>
+											{movie.popularity}
+										</strong>
+									</p>
+									<p>
+										Release Date:
+										<strong>
+											{movie.release_date}
+										</strong>
+									</p>
+								</section>
+							</CardDescription>
 						</a>
 					</CardContent>
 				</Card>

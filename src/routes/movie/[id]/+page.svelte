@@ -14,11 +14,12 @@
 				src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
 				alt={movie.title}
 				class="w-3/5 rounded-md"
+				loading="eager"
 			/>
 		</div>
 		<div class="flex w-full flex-col items-start justify-center gap-5 pt-10 pl-5 lg:w-1/2">
 			<h1 class="text-start text-3xl font-bold">{movie.title}</h1>
-			<p class="w-4/5 py-3">
+			<p class="w-4/5 py-0">
 				<i>
 					{movie.overview}
 				</i>
@@ -57,15 +58,15 @@
 			<p><strong>Revenue: </strong> {movie.revenue}$</p>
 			<p><strong>Status: </strong> {movie.status}</p>
 			{#if movie.production_companies}
-				<section class="flex flex-wrap gap-2">
+				<section class="flex flex-wrap gap-2 w-11/12">
 					<p>Production Companies:</p>
-					{#each movie.production_companies as item}
-						<Badge>{item.name}</Badge>
-					{/each}
+						{#each movie.production_companies as item}
+							<Badge>{item.name}</Badge>
+						{/each}
 				</section>
 			{/if}
 			{#if movie.production_countries}
-				<section class="flex flex-wrap gap-2">
+				<section class="flex flex-wrap gap-2 w-11/12">
 					<p>Production Country(s):</p>
 					{#each movie.production_countries as item}
 						<Badge>{item.name}</Badge>

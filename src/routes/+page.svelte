@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
 	import { goto } from '$app/navigation';
 	import { topRated } from '$lib/assets/topRated';
 	import { popular } from '$lib/assets/popular';
@@ -8,9 +8,11 @@
 	import Card from '$lib/components/ui/card/card.svelte';
 	import CardDescription from '$lib/components/ui/card/card-description.svelte';
 
-	function goToDetailpage(url: number) {
+	function goToDetailpage(url) {
 		goto(`/movie/${url}`, { replaceState: false });
 	}
+	export let data;
+	const { movies, populars, upcomings } = data;
 </script>
 
 <main>
@@ -33,7 +35,7 @@
 	<div class="flex w-full flex-col gap-5 py-10" id="top-rated">
 		<p class="pl-3 text-2xl font-bold">Top Rated</p>
 		<div class="no-scrollbar flex w-full gap-5 overflow-x-scroll px-3">
-			{#each topRated.results as movie (movie.id)}
+			{#each movies.results as movie (movie.id)}
 				<Card
 					class="min-h-fit w-full cursor-pointer bg-gray-500/30"
 					onclick={() => goToDetailpage(movie.id)}
@@ -45,7 +47,7 @@
 							<img
 								src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
 								alt={movie.title}
-								loading="eager"
+								loading="lazy"
 								class="min-h-[100px] max-w-[150px] rounded-md md:max-w-[200px] lg:max-w-[250px]"
 							/>
 
@@ -76,7 +78,7 @@
 	<div class="flex w-full flex-col gap-5 py-10" id="upcoming">
 		<p class="pl-3 text-2xl font-bold">Upcoming</p>
 		<div class="no-scrollbar flex w-full gap-5 overflow-x-scroll px-3">
-			{#each upComing.results as movie (movie.id)}
+			{#each upcomings.results as movie (movie.id)}
 				<Card
 					class="min-h-fit w-full cursor-pointer bg-gray-500/30"
 					onclick={() => goToDetailpage(movie.id)}
@@ -88,7 +90,7 @@
 							<img
 								src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
 								alt={movie.title}
-								loading="eager"
+								loading="lazy"
 								class="min-h-[100px] max-w-[150px] rounded-md md:max-w-[200px] lg:max-w-[250px]"
 							/>
 
@@ -118,7 +120,7 @@
 	<div class="flex w-full flex-col gap-5 py-10" id="popular">
 		<p class="pl-3 text-2xl font-bold">Popular</p>
 		<div class="no-scrollbar flex w-full gap-5 overflow-x-scroll px-3">
-			{#each popular.results as movie (movie.id)}
+			{#each populars.results as movie (movie.id)}
 				<Card
 					class="min-h-fit w-full  cursor-pointer bg-gray-500/30"
 					onclick={() => goToDetailpage(movie.id)}
@@ -130,11 +132,11 @@
 							<img
 								src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
 								alt={movie.title}
-								loading="eager"
+								loading="lazy"
 								class="min-h-[100px] max-w-[150px] rounded-md md:max-w-[200px] lg:max-w-[250px]"
 							/>
 
-							<CardTitle class="text-md pt-5 text-center font-bold pb-3 ">{movie.title}</CardTitle>
+							<CardTitle class="text-md pt-5 pb-3 text-center font-bold ">{movie.title}</CardTitle>
 							<CardDescription class="text-center">
 								<section class="text-md">
 									<p>
