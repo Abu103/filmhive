@@ -1,18 +1,23 @@
 <script>
 	import { goto } from '$app/navigation';
-	import { topRated } from '$lib/assets/topRated';
-	import { popular } from '$lib/assets/popular';
-	import { upComing } from '$lib/assets/Upcoming';
 	import CardContent from '$lib/components/ui/card/card-content.svelte';
 	import CardTitle from '$lib/components/ui/card/card-title.svelte';
 	import Card from '$lib/components/ui/card/card.svelte';
 	import CardDescription from '$lib/components/ui/card/card-description.svelte';
-
+	//@ts-ignore
 	function goToDetailpage(url) {
 		goto(`/movie/${url}`, { replaceState: false });
 	}
+	//@ts-ignore
+	function goToSeriesDetail(url) {
+		goto(`/TV/${url}`, { replaceState: false });
+	}
 	export let data;
-	const { movies, populars, upcomings } = data;
+	$: movies = data.movies;
+	$: populars = data.populars;
+	$: upcomings = data.upcomings;
+	$: TVPopulars = data.TVPopulars;
+	$: TVTopRateds = data.TVTopRateds;
 </script>
 
 <main>
@@ -149,6 +154,90 @@
 										Release Date:
 										<strong>
 											{movie.release_date}
+										</strong>
+									</p>
+								</section>
+							</CardDescription>
+						</div>
+					</CardContent>
+				</Card>
+			{/each}
+		</div>
+	</div>
+	<div class="flex w-full flex-col gap-5 py-10" id="TV-Series">
+		<p class="pl-3 text-2xl font-bold">TV Popular</p>
+		<div class="no-scrollbar flex w-full gap-5 overflow-x-scroll px-3">
+			{#each TVPopulars.results as movie (movie.id)}
+				<Card
+					class="min-h-fit w-full  cursor-pointer bg-gray-500/30"
+					onclick={() => goToSeriesDetail(movie.id)}
+				>
+					<CardContent
+						class="flex min-h-fit min-w-[100px] flex-row place-content-center gap-5 lg:min-h-[100px] lg:min-w-[300px]"
+					>
+						<div class="flex-row">
+							<img
+								src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+								alt={movie.title}
+								loading="lazy"
+								class="min-h-[100px] max-w-[150px] rounded-md md:max-w-[200px] lg:max-w-[250px]"
+							/>
+
+							<CardTitle class="text-md pt-5 pb-3 text-center font-bold ">{movie.name}</CardTitle>
+							<CardDescription class="text-center">
+								<section class="text-md">
+									<p>
+										Popularity:
+										<strong>
+											{movie.popularity}
+										</strong>
+									</p>
+									<p>
+										Release Date:
+										<strong>
+											{movie.first_air_date}
+										</strong>
+									</p>
+								</section>
+							</CardDescription>
+						</div>
+					</CardContent>
+				</Card>
+			{/each}
+		</div>
+	</div>
+	<div class="flex w-full flex-col gap-5 py-10" id="TV-Top-rated">
+		<p class="pl-3 text-2xl font-bold">TV Top Rated</p>
+		<div class="no-scrollbar flex w-full gap-5 overflow-x-scroll px-3">
+			{#each TVTopRateds.results as movie (movie.id)}
+				<Card
+					class="min-h-fit w-full  cursor-pointer bg-gray-500/30"
+					onclick={() => goToSeriesDetail(movie.id)}
+				>
+					<CardContent
+						class="flex min-h-fit min-w-[100px] flex-row place-content-center gap-5 lg:min-h-[100px] lg:min-w-[300px]"
+					>
+						<div class="flex-row">
+							<img
+								src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+								alt={movie.title}
+								loading="lazy"
+								class="min-h-[100px] max-w-[150px] rounded-md md:max-w-[200px] lg:max-w-[250px]"
+							/>
+
+							<CardTitle class="text-md pt-5 pb-3 text-center font-bold ">{movie.name}</CardTitle>
+							<CardDescription class="text-center">
+								<section class="text-md">
+									<p>
+										Popularity:
+										<strong>
+											{movie.popularity}
+										</strong>
+									</p>
+									<p>
+										Release Date:
+										<strong>
+											{movie.first_air_date}
 										</strong>
 									</p>
 								</section>
