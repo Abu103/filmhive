@@ -7,7 +7,7 @@
 	console.log(movie);
 </script>
 
-<div class="flex min-h-screen place-self-center py-10 pt-20">
+<div class="flex min-h-screen place-self-center py-10 pt-20 bg-black/0">
 	<main class="flex min-h-[80vh] flex-col place-content-center lg:flex-row-reverse">
 		<div class="flex w-full items-center justify-center place-self-center lg:w-1/2">
 			<img
@@ -17,13 +17,11 @@
 				loading="eager"
 			/>
 		</div>
-		<div class="flex w-full flex-col items-start justify-center gap-5 pt-10 pl-10 lg:w-1/2">
+		<div class="flex w-full flex-col items-start justify-center gap-5 pt-10 lg:pl-10 px-5 lg:w-1/2">
 			<h1 class="text-start text-3xl font-bold">{movie.title}</h1>
 			<p>
-				<i>
 					{movie.overview}
-				</i>
-			</p>
+			</p> 	
 			<p><strong>Tagline:</strong> {movie.tagline}</p>
 			<div class="flex flex-wrap gap-2">
 				<strong>Genres:</strong>

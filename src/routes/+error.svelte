@@ -7,7 +7,7 @@
   <div class="mt-6">
     <a
       href="/"
-      class="inline-block px-6 py-3 text-sm font-medium text-black bg-[#ffe0c2] dark:bg-[#ffe0c2] rounded-md transition"
+      class="inline-block px-6 py-3 text-sm font-medium text-black bg-[#ffe0c2] dark:bg-[#ffe0c2] rounded-md transition-all"
     >
       Go Home
     </a>

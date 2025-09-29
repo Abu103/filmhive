@@ -39,7 +39,7 @@
 				onkeydown={(e) => e.key === 'Enter' && handleSearch()}
 			/>
 	</div>
-	<ul class="hidden gap-4 lg:flex items-center">
+	<ul class="hidden gap-5 lg:flex items-center">
 		<a href="/">Home</a>
 		<a href="/contact	">Contact</a>
 		<a href="/about">About</a>

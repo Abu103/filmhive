@@ -90,6 +90,7 @@
 				<img
 					src={`https://image.tmdb.org/t/p/original/${item.poster_path}`}
 					alt={item.name}
+					loading="eager"
 					class="h-full w-full object-cover"
 				/>
 
