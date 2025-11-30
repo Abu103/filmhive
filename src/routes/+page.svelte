@@ -1,9 +1,6 @@
 <script>
 	import { goto } from '$app/navigation';
-	import CardContent from '$lib/components/ui/card/card-content.svelte';
-	import CardTitle from '$lib/components/ui/card/card-title.svelte';
-	import Card from '$lib/components/ui/card/card.svelte';
-	import CardDescription from '$lib/components/ui/card/card-description.svelte';
+	import * as Carousel from '$lib/components/ui/carousel';
 	//@ts-ignore
 	function goToDetailpage(url) {
 		goto(`/movie/${url}`, { replaceState: false });
@@ -21,242 +18,229 @@
 </script>
 
 <main>
-	<section
-		class="relative -z-1 h-[100vh] min-h-full w-full bg-cover bg-center bg-no-repeat pt-20"
-		style={`background-image: url(https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjnsjBOjhuWOht-gfnfj6YgCdjA4sxOukRErKC5gA0WcpLL6P24KJGkTPwF9SL_g9WmIp-BXV4ibRJuuUqRm3iScqA1vEUM3ixkgMr8JPn4vG7ZasljWw26g3_i5jFmf6VlV0cway5pSH6-/w1680-h1050-c/avengers-endgame-movie-characters-uhdpaper.com-4K-52.jpg)`}
-	>
-		<div class="bg-opacity-50 absolute inset-0 bg-black/40"></div>
+	<section class="relative h-[80vh] w-full overflow-hidden">
+		<div class="absolute inset-0">
+			<img
+				src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjnsjBOjhuWOht-gfnfj6YgCdjA4sxOukRErKC5gA0WcpLL6P24KJGkTPwF9SL_g9WmIp-BXV4ibRJuuUqRm3iScqA1vEUM3ixkgMr8JPn4vG7ZasljWw26g3_i5jFmf6VlV0cway5pSH6-/w1680-h1050-c/avengers-endgame-movie-characters-uhdpaper.com-4K-52.jpg"
+				alt="Hero"
+				class="h-full w-full object-cover opacity-50 grayscale transition-all duration-1000 hover:grayscale-0"
+			/>
+			<div
+				class="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent"
+			></div>
+		</div>
 
-		<div
-			class="relative z-10 flex h-full flex-col items-center justify-center px-4 text-center text-white"
-		>
-			<h1 class="mb-4 text-4xl font-bold sm:text-5xl">Welcome to FilmHive</h1>
-			<p class="mb-6 max-w-2xl text-lg sm:text-xl">
-				Discover top-rated movies, hidden gems, and your next favorite watch – all in one place.
+		<div class="relative z-10 flex h-full flex-col items-center justify-center px-4 text-center">
+			<h1 class="text-7xl font-black tracking-tighter text-foreground opacity-90 sm:text-9xl">
+				FILMHIVE
+			</h1>
+			<p class="mt-4 text-lg font-light tracking-[0.3em] text-muted-foreground uppercase">
+				Cinematic Universe
 			</p>
 		</div>
 	</section>
 
-	<div class="flex w-full flex-col gap-5 py-10" id="top-rated">
-		<p class="pl-3 text-2xl font-bold">Top Rated</p>
-		<div class="no-scrollbar flex w-full gap-5 overflow-x-scroll px-3">
-			{#each movies.results as movie (movie.id)}
-				<Card
-					class="min-h-fit w-full cursor-pointer bg-gray-500/30"
-					onclick={() => goToDetailpage(movie.id)}
-				>
-					<CardContent
-						class="flex min-h-fit min-w-[100px] flex-row place-content-center gap-5 lg:min-h-[100px] lg:min-w-[300px]"
-					>
-						<div class="flex-row">
+	<div class="flex w-full flex-col gap-8 py-12" id="top-rated">
+		<h2 class="px-12 text-sm font-medium tracking-[0.2em] text-muted-foreground uppercase">
+			Top Rated
+		</h2>
+		<Carousel.Root opts={{ align: 'start' }} class="w-full px-12">
+			<Carousel.Content class="-ml-4">
+				{#each movies.results as movie (movie.id)}
+					<Carousel.Item class="basis-1/2 pl-4 md:basis-1/3 lg:basis-1/5">
+						<div class="group relative aspect-[2/3] overflow-hidden rounded-xl bg-muted">
 							<img
 								src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
 								alt={movie.title}
 								loading="lazy"
-								class="min-h-[100px] max-w-[150px] rounded-md md:max-w-[200px] lg:max-w-[250px]"
+								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
 							/>
-
-							<CardTitle class="text-md pt-5 pb-3 text-center font-bold">{movie.title}</CardTitle>
-
-							<CardDescription class="text-center">
-								<section class="text-md">
-									<p>
-										Popularity:
-										<strong>
-											{movie.popularity}
-										</strong>
-									</p>
-									<p>
-										Release Date:
-										<strong>
-											{movie.release_date}
-										</strong>
-									</p>
-								</section>
-							</CardDescription>
+							<div
+								class="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+							>
+								<h3 class="text-lg leading-tight font-bold text-white">{movie.title}</h3>
+								<p class="mt-2 text-xs font-medium tracking-wider text-gray-300 uppercase">
+									{movie.release_date?.split('-')[0] || 'N/A'}
+								</p>
+							</div>
+							<button
+								class="absolute inset-0 h-full w-full cursor-pointer"
+								onclick={() => goToDetailpage(movie.id)}
+								aria-label={`View ${movie.title}`}
+							></button>
 						</div>
-					</CardContent>
-				</Card>
-			{/each}
-		</div>
+					</Carousel.Item>
+				{/each}
+			</Carousel.Content>
+			<Carousel.Previous
+				class="left-4 border-0 bg-background/50 backdrop-blur-sm hover:bg-background/80"
+			/>
+			<Carousel.Next
+				class="right-4 border-0 bg-background/50 backdrop-blur-sm hover:bg-background/80"
+			/>
+		</Carousel.Root>
 	</div>
-	<div class="flex w-full flex-col gap-5 py-10" id="upcoming">
-		<p class="pl-3 text-2xl font-bold">Upcoming</p>
-		<div class="no-scrollbar flex w-full gap-5 overflow-x-scroll px-3">
-			{#each upcomings.results as movie (movie.id)}
-				<Card
-					class="min-h-fit w-full cursor-pointer bg-gray-500/30"
-					onclick={() => goToDetailpage(movie.id)}
-				>
-					<CardContent
-						class="flex min-h-fit min-w-[100px] flex-row place-content-center gap-5 lg:min-h-[100px] lg:min-w-[300px]"
-					>
-						<div class="flex-row">
+	<div class="flex w-full flex-col gap-8 py-12" id="upcoming">
+		<h2 class="px-12 text-sm font-medium tracking-[0.2em] text-muted-foreground uppercase">
+			Upcoming
+		</h2>
+		<Carousel.Root opts={{ align: 'start' }} class="w-full px-12">
+			<Carousel.Content class="-ml-4">
+				{#each upcomings.results as movie (movie.id)}
+					<Carousel.Item class="basis-1/2 pl-4 md:basis-1/3 lg:basis-1/5">
+						<div class="group relative aspect-[2/3] overflow-hidden rounded-xl bg-muted">
 							<img
 								src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
 								alt={movie.title}
 								loading="lazy"
-								class="min-h-[100px] max-w-[150px] rounded-md md:max-w-[200px] lg:max-w-[250px]"
+								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
 							/>
-
-							<CardTitle class="text-md pt-5 pb-3 text-center font-bold ">{movie.title}</CardTitle>
-							<CardDescription class="text-center">
-								<section class="text-md">
-									<p>
-										Popularity:
-										<strong>
-											{movie.popularity}
-										</strong>
-									</p>
-									<p>
-										Release Date:
-										<strong>
-											{movie.release_date}
-										</strong>
-									</p>
-								</section>
-							</CardDescription>
+							<div
+								class="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+							>
+								<h3 class="text-lg leading-tight font-bold text-white">{movie.title}</h3>
+								<p class="mt-2 text-xs font-medium tracking-wider text-gray-300 uppercase">
+									{movie.release_date?.split('-')[0] || 'N/A'}
+								</p>
+							</div>
+							<button
+								class="absolute inset-0 h-full w-full cursor-pointer"
+								onclick={() => goToDetailpage(movie.id)}
+								aria-label={`View ${movie.title}`}
+							></button>
 						</div>
-					</CardContent>
-				</Card>
-			{/each}
-		</div>
+					</Carousel.Item>
+				{/each}
+			</Carousel.Content>
+			<Carousel.Previous
+				class="left-4 border-0 bg-background/50 backdrop-blur-sm hover:bg-background/80"
+			/>
+			<Carousel.Next
+				class="right-4 border-0 bg-background/50 backdrop-blur-sm hover:bg-background/80"
+			/>
+		</Carousel.Root>
 	</div>
-	<div class="flex w-full flex-col gap-5 py-10" id="popular">
-		<p class="pl-3 text-2xl font-bold">Popular</p>
-		<div class="no-scrollbar flex w-full gap-5 overflow-x-scroll px-3">
-			{#each populars.results as movie (movie.id)}
-				<Card
-					class="min-h-fit w-full  cursor-pointer bg-gray-500/30"
-					onclick={() => goToDetailpage(movie.id)}
-				>
-					<CardContent
-						class="flex min-h-fit min-w-[100px] flex-row place-content-center gap-5 lg:min-h-[100px] lg:min-w-[300px]"
-					>
-						<div class="flex-row">
+	<div class="flex w-full flex-col gap-8 py-12" id="popular">
+		<h2 class="px-12 text-sm font-medium tracking-[0.2em] text-muted-foreground uppercase">
+			Popular
+		</h2>
+		<Carousel.Root opts={{ align: 'start' }} class="w-full px-12">
+			<Carousel.Content class="-ml-4">
+				{#each populars.results as movie (movie.id)}
+					<Carousel.Item class="basis-1/2 pl-4 md:basis-1/3 lg:basis-1/5">
+						<div class="group relative aspect-[2/3] overflow-hidden rounded-xl bg-muted">
 							<img
 								src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
 								alt={movie.title}
 								loading="lazy"
-								class="min-h-[100px] max-w-[150px] rounded-md md:max-w-[200px] lg:max-w-[250px]"
+								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
 							/>
-
-							<CardTitle class="text-md pt-5 pb-3 text-center font-bold ">{movie.title}</CardTitle>
-							<CardDescription class="text-center">
-								<section class="text-md">
-									<p>
-										Popularity:
-										<strong>
-											{movie.popularity}
-										</strong>
-									</p>
-									<p>
-										Release Date:
-										<strong>
-											{movie.release_date}
-										</strong>
-									</p>
-								</section>
-							</CardDescription>
+							<div
+								class="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+							>
+								<h3 class="text-lg leading-tight font-bold text-white">{movie.title}</h3>
+								<p class="mt-2 text-xs font-medium tracking-wider text-gray-300 uppercase">
+									{movie.release_date?.split('-')[0] || 'N/A'}
+								</p>
+							</div>
+							<button
+								class="absolute inset-0 h-full w-full cursor-pointer"
+								onclick={() => goToDetailpage(movie.id)}
+								aria-label={`View ${movie.title}`}
+							></button>
 						</div>
-					</CardContent>
-				</Card>
-			{/each}
-		</div>
+					</Carousel.Item>
+				{/each}
+			</Carousel.Content>
+			<Carousel.Previous
+				class="left-4 border-0 bg-background/50 backdrop-blur-sm hover:bg-background/80"
+			/>
+			<Carousel.Next
+				class="right-4 border-0 bg-background/50 backdrop-blur-sm hover:bg-background/80"
+			/>
+		</Carousel.Root>
 	</div>
-	<div class="flex w-full flex-col gap-5 py-10" id="TV-Series">
-		<p class="pl-3 text-2xl font-bold">TV Popular</p>
-		<div class="no-scrollbar flex w-full gap-5 overflow-x-scroll px-3">
-			{#each TVPopulars.results as movie (movie.id)}
-				<Card
-					class="min-h-fit w-full  cursor-pointer bg-gray-500/30"
-					onclick={() => goToSeriesDetail(movie.id)}
-				>
-					<CardContent
-						class="flex min-h-fit min-w-[100px] flex-row place-content-center gap-5 lg:min-h-[100px] lg:min-w-[300px]"
-					>
-						<div class="flex-row">
+	<div class="flex w-full flex-col gap-8 py-12" id="TV-Series">
+		<h2 class="px-12 text-sm font-medium tracking-[0.2em] text-muted-foreground uppercase">
+			TV Popular
+		</h2>
+		<Carousel.Root opts={{ align: 'start' }} class="w-full px-12">
+			<Carousel.Content class="-ml-4">
+				{#each TVPopulars.results as movie (movie.id)}
+					<Carousel.Item class="basis-1/2 pl-4 md:basis-1/3 lg:basis-1/5">
+						<div class="group relative aspect-[2/3] overflow-hidden rounded-xl bg-muted">
 							<img
 								src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
 								alt={movie.title}
 								loading="lazy"
-								class="min-h-[100px] max-w-[150px] rounded-md md:max-w-[200px] lg:max-w-[250px]"
+								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
 							/>
-
-							<CardTitle class="text-md pt-5 pb-3 text-center font-bold ">{movie.name}</CardTitle>
-							<CardDescription class="text-center">
-								<section class="text-md">
-									<p>
-										Popularity:
-										<strong>
-											{movie.popularity}
-										</strong>
-									</p>
-									<p>
-										Release Date:
-										<strong>
-											{movie.first_air_date}
-										</strong>
-									</p>
-								</section>
-							</CardDescription>
+							<div
+								class="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+							>
+								<h3 class="text-lg leading-tight font-bold text-white">{movie.name}</h3>
+								<p class="mt-2 text-xs font-medium tracking-wider text-gray-300 uppercase">
+									{movie.first_air_date?.split('-')[0] || 'N/A'}
+								</p>
+							</div>
+							<button
+								class="absolute inset-0 h-full w-full cursor-pointer"
+								onclick={() => goToSeriesDetail(movie.id)}
+								aria-label={`View ${movie.name}`}
+							></button>
 						</div>
-					</CardContent>
-				</Card>
-			{/each}
-		</div>
+					</Carousel.Item>
+				{/each}
+			</Carousel.Content>
+			<Carousel.Previous
+				class="left-4 border-0 bg-background/50 backdrop-blur-sm hover:bg-background/80"
+			/>
+			<Carousel.Next
+				class="right-4 border-0 bg-background/50 backdrop-blur-sm hover:bg-background/80"
+			/>
+		</Carousel.Root>
 	</div>
-	<div class="flex w-full flex-col gap-5 py-10" id="TV-Top-rated">
-		<p class="pl-3 text-2xl font-bold">TV Top Rated</p>
-		<div class="no-scrollbar flex w-full gap-5 overflow-x-scroll px-3">
-			{#each TVTopRateds.results as movie (movie.id)}
-				<Card
-					class="min-h-fit w-full  cursor-pointer bg-gray-500/30"
-					onclick={() => goToSeriesDetail(movie.id)}
-				>
-					<CardContent
-						class="flex min-h-fit min-w-[100px] flex-row place-content-center gap-5 lg:min-h-[100px] lg:min-w-[300px]"
-					>
-						<div class="flex-row">
+	<div class="flex w-full flex-col gap-8 py-12" id="TV-Top-rated">
+		<h2 class="px-12 text-sm font-medium tracking-[0.2em] text-muted-foreground uppercase">
+			TV Top Rated
+		</h2>
+		<Carousel.Root opts={{ align: 'start' }} class="w-full px-12">
+			<Carousel.Content class="-ml-4">
+				{#each TVTopRateds.results as movie (movie.id)}
+					<Carousel.Item class="basis-1/2 pl-4 md:basis-1/3 lg:basis-1/5">
+						<div class="group relative aspect-[2/3] overflow-hidden rounded-xl bg-muted">
 							<img
 								src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
 								alt={movie.title}
 								loading="lazy"
-								class="min-h-[100px] max-w-[150px] rounded-md md:max-w-[200px] lg:max-w-[250px]"
+								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
 							/>
-
-							<CardTitle class="text-md pt-5 pb-3 text-center font-bold ">{movie.name}</CardTitle>
-							<CardDescription class="text-center">
-								<section class="text-md">
-									<p>
-										Popularity:
-										<strong>
-											{movie.popularity}
-										</strong>
-									</p>
-									<p>
-										Release Date:
-										<strong>
-											{movie.first_air_date}
-										</strong>
-									</p>
-								</section>
-							</CardDescription>
+							<div
+								class="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+							>
+								<h3 class="text-lg leading-tight font-bold text-white">{movie.name}</h3>
+								<p class="mt-2 text-xs font-medium tracking-wider text-gray-300 uppercase">
+									{movie.first_air_date?.split('-')[0] || 'N/A'}
+								</p>
+							</div>
+							<button
+								class="absolute inset-0 h-full w-full cursor-pointer"
+								onclick={() => goToSeriesDetail(movie.id)}
+								aria-label={`View ${movie.name}`}
+							></button>
 						</div>
-					</CardContent>
-				</Card>
-			{/each}
-		</div>
+					</Carousel.Item>
+				{/each}
+			</Carousel.Content>
+			<Carousel.Previous
+				class="left-4 border-0 bg-background/50 backdrop-blur-sm hover:bg-background/80"
+			/>
+			<Carousel.Next
+				class="right-4 border-0 bg-background/50 backdrop-blur-sm hover:bg-background/80"
+			/>
+		</Carousel.Root>
 	</div>
 </main>
 
 <style>
-	.no-scrollbar {
-		scrollbar-width: none;
-		-ms-overflow-style: none;
-	}
-
-	.no-scrollbar::-webkit-scrollbar {
-		display: none;
-	}
 </style>

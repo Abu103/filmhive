@@ -1,3 +1,4 @@
+import { TMDB_AUTH_KEY } from '$env/static/private';
 import { error } from '@sveltejs/kit';
 
 export async function load({ params, fetch }) {
@@ -6,7 +7,7 @@ export async function load({ params, fetch }) {
     const API = await fetch(`https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US`, {
         method: "GET",
         headers: {
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1ZjYyMjk3NTNkNTlkMWUzYTAzZWFlZmJlODk4ZGZkYiIsIm5iZiI6MTc1NTMyNTMwNy4wMTEwMDAyLCJzdWIiOiI2OGEwMjM3YjNjMzk3ZTFlNmJlZDExMzQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.UIjbWBDFgklKnpNxAhny63YhJF2NKfRL1JAeTQr7KgU",
+            "Authorization": `Bearer ${TMDB_AUTH_KEY}`,
             "accept": "application/json"
         }
     }

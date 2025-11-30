@@ -1,106 +1,190 @@
 <script>
 	import { goto } from '$app/navigation';
-	// import Spinner from '$lib/components/Spinner.svelte';
 	import Badge from '$lib/components/ui/badge/badge.svelte';
-	import CardContent from '$lib/components/ui/card/card-content.svelte';
-	import CardDescription from '$lib/components/ui/card/card-description.svelte';
-	import CardTitle from '$lib/components/ui/card/card-title.svelte';
-	import Card from '$lib/components/ui/card/card.svelte';
+	import * as Carousel from '$lib/components/ui/carousel';
 
 	$: loading = false;
 
 	export let data;
 	$: TV = data.TV;
-	$: recommendations = data.recommendations;
+	$: recommendation = data.recommendations;
 	// @ts-ignore
 	function goToDetailpage(url) {
 		loading = true;
 		goto(`/TV/${url}`, { replaceState: false });
 		loading = false;
 	}
-	console.log(data.TV);
 </script>
 
 <!-- {#if loading}
 	<Spinner />
 {/if} -->
 
-<div class="flex min-h-screen place-self-center py-10 pt-20">
-	<main class="flex min-h-[80vh] flex-col place-content-center lg:flex-row-reverse">
-		<div class="flex w-full items-center justify-center place-self-center lg:w-1/2">
+<div class="relative min-h-screen w-full">
+	<!-- Hero Background -->
+	<div class="absolute inset-0 h-[70vh] w-full overflow-hidden">
+		<img
+			src={`https://image.tmdb.org/t/p/original/${TV.backdrop_path || TV.poster_path}`}
+			alt={TV.name}
+			class="h-full w-full object-cover opacity-40 blur-sm transition-all duration-1000"
+		/>
+		<div
+			class="absolute inset-0 bg-gradient-to-b from-transparent via-background/80 to-background"
+		></div>
+	</div>
+
+	<main class="relative z-10 mx-auto flex max-w-7xl flex-col gap-10 px-6 pt-32 lg:flex-row">
+		<!-- Poster -->
+		<div class="flex-shrink-0 lg:w-1/3">
 			<img
 				src={`https://image.tmdb.org/t/p/original/${TV.poster_path}`}
-				alt={TV.title}
-				class="w-3/5 rounded-md"
+				alt={TV.name}
+				class="w-full rounded-xl shadow-2xl transition-transform hover:scale-[1.02]"
 				loading="eager"
 			/>
 		</div>
-		<div class="flex w-full flex-col items-start justify-center gap-5 pt-10 pl-10 lg:w-1/2">
-			<h1 class="text-start text-3xl font-bold">{TV.name}</h1>
-			<p class="w-4/5 py-0">
-				<i>
-					{TV.overview}
-				</i>
-			</p>
-			<p><strong>Tagline:</strong> {TV.tagline}</p>
-			<div class="flex w-10/12 flex-wrap gap-2">
-				<strong>Genres:</strong>
-				{#each TV.genres as genres}
-					<Badge>{genres.name}</Badge>
+
+		<!-- Details -->
+		<div class="flex flex-col gap-6 lg:w-2/3">
+			<div>
+				<h1 class="text-5xl font-black tracking-tight text-white sm:text-6xl">{TV.name}</h1>
+				{#if TV.tagline}
+					<p class="mt-2 text-xl font-light text-muted-foreground italic">"{TV.tagline}"</p>
+				{/if}
+			</div>
+
+			<div class="flex flex-wrap gap-2">
+				{#each TV.genres as genre}
+					<Badge variant="secondary" class="px-3 py-1 text-sm">{genre.name}</Badge>
 				{/each}
 			</div>
-			<p>
-				<strong>Release date:</strong>
-				{TV.first_air_date}
-			</p>
-			{#if TV.homepage}
-				<p>
-					<strong>Homepage: </strong>
-					<a href={TV.homepage} target="_blank" class="text-blue-600 hover:underline"> {TV.name}</a>
-				</p>
-			{/if}
-			<p><strong>Status: </strong> {TV.status}</p>
-			{#if TV.production_companies}
-				<section class="flex w-10/12 flex-wrap gap-2">
-					<p>Production Companies:</p>
-					{#each TV.production_companies as item}
-						<Badge>{item.name}</Badge>
-					{/each}
-				</section>
-			{/if}
-			{#if TV.production_countries}
-				<section class="flex w-11/12 flex-wrap gap-2">
-					<p>Production Country(s):</p>
-					{#each TV.production_countries as item}
-						<Badge>{item.name}</Badge>
-					{/each}
-				</section>
+
+			<div class="space-y-4 text-lg text-gray-300">
+				<p class="leading-relaxed">{TV.overview}</p>
+
+				<div class="grid grid-cols-2 gap-4 text-sm sm:grid-cols-3">
+					<div>
+						<span class="block text-muted-foreground">First Air Date</span>
+						<span class="font-medium text-white">{TV.first_air_date}</span>
+					</div>
+					<div>
+						<span class="block text-muted-foreground">Status</span>
+						<span class="font-medium text-white">{TV.status}</span>
+					</div>
+					<div>
+						<span class="block text-muted-foreground">Seasons</span>
+						<span class="font-medium text-white">{TV.number_of_seasons}</span>
+					</div>
+					<div>
+						<span class="block text-muted-foreground">Episodes</span>
+						<span class="font-medium text-white">{TV.number_of_episodes}</span>
+					</div>
+				</div>
+
+				<div class="flex gap-4 pt-4">
+					{#if TV.homepage}
+						<a
+							href={TV.homepage}
+							target="_blank"
+							class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+						>
+							Website
+						</a>
+					{/if}
+				</div>
+			</div>
+
+			{#if TV.production_companies?.length}
+				<div class="border-t border-white/10 pt-6">
+					<p class="mb-3 text-sm font-medium text-muted-foreground">Production</p>
+					<div class="flex flex-wrap gap-3">
+						{#each TV.production_companies as company}
+							<span class="text-sm text-gray-400">{company.name}</span>
+						{/each}
+					</div>
+				</div>
 			{/if}
 		</div>
 	</main>
 </div>
-<section>
-	<p class="text-xl pl-10">Seasons:</p>
-	<!-- Scroll container -->
-	<div class="flex space-x-4 overflow-x-auto px-4 whitespace-nowrap pl-10 py-5">
-		{#each TV.seasons as item}
-			<div
-				class="relative inline-block h-[300px] w-[200px] flex-shrink-0 overflow-hidden rounded-md"
-			>
-				<img
-					src={`https://image.tmdb.org/t/p/original/${item.poster_path}`}
-					alt={item.name}
-					loading="eager"
-					class="h-full w-full object-cover"
-				/>
 
-				<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-
-				<div class="absolute bottom-4 left-4 z-10 text-white">
-					<h3 class="text-md font-semibold">{item.name}</h3>
-					<p>{item.air_date}</p>
-				</div>
-			</div>
-		{/each}
+{#if TV.seasons?.length > 0}
+	<div class="mx-auto max-w-7xl px-6 py-12">
+		<h2 class="mb-6 text-sm font-medium tracking-[0.2em] text-muted-foreground uppercase">
+			Seasons
+		</h2>
+		<Carousel.Root opts={{ align: 'start' }} class="w-full">
+			<Carousel.Content class="-ml-4">
+				{#each TV.seasons as item}
+					<Carousel.Item class="basis-1/2 pl-4 md:basis-1/3 lg:basis-1/5">
+						<div class="group relative aspect-[2/3] overflow-hidden rounded-xl bg-muted">
+							<img
+								src={`https://image.tmdb.org/t/p/original/${item.poster_path}`}
+								alt={item.name}
+								loading="lazy"
+								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+							/>
+							<div
+								class="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+							>
+								<h3 class="text-lg leading-tight font-bold text-white">{item.name}</h3>
+								<p class="mt-2 text-xs font-medium tracking-wider text-gray-300 uppercase">
+									{item.air_date?.split('-')[0] || 'N/A'} • {item.episode_count} Eps
+								</p>
+							</div>
+						</div>
+					</Carousel.Item>
+				{/each}
+			</Carousel.Content>
+			<Carousel.Previous
+				class="left-4 border-0 bg-background/50 backdrop-blur-sm hover:bg-background/80"
+			/>
+			<Carousel.Next
+				class="right-4 border-0 bg-background/50 backdrop-blur-sm hover:bg-background/80"
+			/>
+		</Carousel.Root>
 	</div>
-</section>
+{/if}
+
+{#if recommendation.results.length > 0}
+	<div class="mx-auto max-w-7xl px-6 py-12">
+		<h2 class="mb-6 text-sm font-medium tracking-[0.2em] text-muted-foreground uppercase">
+			Recommendations
+		</h2>
+		<Carousel.Root opts={{ align: 'start' }} class="w-full">
+			<Carousel.Content class="-ml-4">
+				{#each recommendation.results as item}
+					<Carousel.Item class="basis-1/2 pl-4 md:basis-1/3 lg:basis-1/5">
+						<div class="group relative aspect-[2/3] overflow-hidden rounded-xl bg-muted">
+							<img
+								src={`https://image.tmdb.org/t/p/original/${item.poster_path}`}
+								alt={item.name}
+								loading="lazy"
+								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+							/>
+							<div
+								class="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+							>
+								<h3 class="text-lg leading-tight font-bold text-white">{item.name}</h3>
+								<p class="mt-2 text-xs font-medium tracking-wider text-gray-300 uppercase">
+									{item.first_air_date?.split('-')[0] || 'N/A'}
+								</p>
+							</div>
+							<button
+								class="absolute inset-0 h-full w-full cursor-pointer"
+								onclick={() => goToDetailpage(item.id)}
+								aria-label={`View ${item.name}`}
+							></button>
+						</div>
+					</Carousel.Item>
+				{/each}
+			</Carousel.Content>
+			<Carousel.Previous
+				class="left-4 border-0 bg-background/50 backdrop-blur-sm hover:bg-background/80"
+			/>
+			<Carousel.Next
+				class="right-4 border-0 bg-background/50 backdrop-blur-sm hover:bg-background/80"
+			/>
+		</Carousel.Root>
+	</div>
+{/if}

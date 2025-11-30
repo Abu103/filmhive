@@ -1,68 +1,56 @@
 <script>
-	import { CardTitle } from '$lib/components/ui/card';
-	import CardContent from '$lib/components/ui/card/card-content.svelte';
-	import CardDescription from '$lib/components/ui/card/card-description.svelte';
-	import Card from '$lib/components/ui/card/card.svelte';
+	import { goto } from '$app/navigation';
 
 	export let data;
 	let { movies } = data;
 
-	console.log(movies);
+	//@ts-ignore
+	function goToDetailpage(url) {
+		goto(`/movie/${url}`, { replaceState: false });
+	}
 </script>
 
 {#if movies.results.length === 0}
-	<main
-		class="flex min-h-screen flex-col items-center justify-center bg-black px-4 text-center text-white"
-	>
-		<h1 class="text-6xl font-bold text-[#ffe0c2]">404</h1>
-		<p class="mt-4 text-xl">Oops! The page you're looking for doesn't exist.</p>
-		<p class="mt-2 text-sm text-gray-400">It might have been moved or never existed.</p>
+	<main class="flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
+		<h1 class="text-8xl font-black text-muted-foreground opacity-20">404</h1>
+		<p class="mt-4 text-xl font-medium text-foreground">No movies found</p>
+		<p class="mt-2 text-sm text-muted-foreground">Try searching for something else.</p>
 
 		<a
 			href="/"
-			class="mt-6 inline-block rounded bg-[#ffe0c2] px-6 py-3 text-black transition hover:bg-[#ffe0c2aa]"
+			class="mt-8 rounded-full bg-white/10 px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-white/20"
 		>
 			Go back home
 		</a>
 	</main>
 {/if}
-<main class="px-4 pt-20">
-	<!-- Responsive Grid -->
-	<div class="columns-[300px]">
-		{#each movies.results as movie}
-			{#if movie.poster_path}
-				<Card class="break-inside-avoid bg-gray-600/20 mb-5">
-					<CardContent class="flex flex-col items-center ">
-						<a href={`/movie/${movie.id}`} class="flex flex-col items-center">
-							<img
-								src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-								alt={movie.title}
-								loading="lazy"
-								class="w-full max-w-[250px] rounded-md object-cover"
-							/>
+<main class="mx-auto max-w-7xl px-6 py-32">
+	<h1 class="mb-12 text-3xl font-bold tracking-tight">Search Results</h1>
 
-							<CardTitle class="mt-4 text-center   text-xl font-semibold break-words">
-								{movie.title}
-							</CardTitle>
-							<CardDescription>
-								<section class="text-md text-center">
-									<p>
-										Popularity:
-										<strong>
-											{movie.popularity}
-										</strong>
-									</p>
-									<p>
-										Release Date:
-										<strong>
-											{movie.release_date}
-										</strong>
-									</p>
-								</section>
-							</CardDescription>
-						</a>
-					</CardContent>
-				</Card>
+	<div class="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+		{#each movies.results as movie (movie.id)}
+			{#if movie.poster_path}
+				<div class="group relative aspect-[2/3] overflow-hidden rounded-xl bg-muted">
+					<img
+						src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+						alt={movie.title}
+						loading="lazy"
+						class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+					/>
+					<div
+						class="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+					>
+						<h3 class="text-lg leading-tight font-bold text-white">{movie.title}</h3>
+						<p class="mt-2 text-xs font-medium tracking-wider text-gray-300 uppercase">
+							{movie.release_date?.split('-')[0] || 'N/A'}
+						</p>
+					</div>
+					<button
+						class="absolute inset-0 h-full w-full cursor-pointer"
+						onclick={() => goToDetailpage(movie.id)}
+						aria-label={`View ${movie.title}`}
+					></button>
+				</div>
 			{/if}
 		{/each}
 	</div>

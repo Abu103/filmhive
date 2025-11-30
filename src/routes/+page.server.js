@@ -1,11 +1,11 @@
-import { Award } from "lucide-svelte";
+import { TMDB_AUTH_KEY } from "$env/static/private";
 
 export async function load() {
     try {
         const API = await fetch("https://api.themoviedb.org/3/movie/top_rated?language=en", {
             method: "GET",
             headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1ZjYyMjk3NTNkNTlkMWUzYTAzZWFlZmJlODk4ZGZkYiIsIm5iZiI6MTc1NTMyNTMwNy4wMTEwMDAyLCJzdWIiOiI2OGEwMjM3YjNjMzk3ZTFlNmJlZDExMzQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.UIjbWBDFgklKnpNxAhny63YhJF2NKfRL1JAeTQr7KgU",
+                "Authorization": `Bearer ${TMDB_AUTH_KEY}`,
                 "accept": "application/json"
             }
 
@@ -13,28 +13,28 @@ export async function load() {
         const APIPopular = await fetch('https://api.themoviedb.org/3/movie/popular?language=en-US', {
             method: "GET",
             headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1ZjYyMjk3NTNkNTlkMWUzYTAzZWFlZmJlODk4ZGZkYiIsIm5iZiI6MTc1NTMyNTMwNy4wMTEwMDAyLCJzdWIiOiI2OGEwMjM3YjNjMzk3ZTFlNmJlZDExMzQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.UIjbWBDFgklKnpNxAhny63YhJF2NKfRL1JAeTQr7KgU",
+                "Authorization": `Bearer ${TMDB_AUTH_KEY}`,
                 "accept": "application/json"
             }
         })
         const APIUpcoming = await fetch(`https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1`, {
             method: "GET",
             headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1ZjYyMjk3NTNkNTlkMWUzYTAzZWFlZmJlODk4ZGZkYiIsIm5iZiI6MTc1NTMyNTMwNy4wMTEwMDAyLCJzdWIiOiI2OGEwMjM3YjNjMzk3ZTFlNmJlZDExMzQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.UIjbWBDFgklKnpNxAhny63YhJF2NKfRL1JAeTQr7KgU",
+                "Authorization": `Bearer ${TMDB_AUTH_KEY}`,
                 "accept": "application/json"
             }
         })
         const TVPopular = await fetch(`https://api.themoviedb.org/3/tv/popular?language=en-US&page=1`, {
             method: "GET",
             headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1ZjYyMjk3NTNkNTlkMWUzYTAzZWFlZmJlODk4ZGZkYiIsIm5iZiI6MTc1NTMyNTMwNy4wMTEwMDAyLCJzdWIiOiI2OGEwMjM3YjNjMzk3ZTFlNmJlZDExMzQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.UIjbWBDFgklKnpNxAhny63YhJF2NKfRL1JAeTQr7KgU",
+                "Authorization": `Bearer ${TMDB_AUTH_KEY}`,
                 "accept": "application/json"
             }
         })
         const TVTopRated = await fetch(`https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=1`, {
             method: "GET",
             headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1ZjYyMjk3NTNkNTlkMWUzYTAzZWFlZmJlODk4ZGZkYiIsIm5iZiI6MTc1NTMyNTMwNy4wMTEwMDAyLCJzdWIiOiI2OGEwMjM3YjNjMzk3ZTFlNmJlZDExMzQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.UIjbWBDFgklKnpNxAhny63YhJF2NKfRL1JAeTQr7KgU",
+                "Authorization": `Bearer ${TMDB_AUTH_KEY}`,
                 "accept": "application/json"
             }
         })

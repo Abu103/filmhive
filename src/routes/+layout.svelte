@@ -12,8 +12,8 @@
 	let inputValue = $state('');
 
 	function handleSearch() {
-		goto(`/search/${inputValue.replace(" ", "+")}`, { replaceState: false });
-		inputValue = ""
+		goto(`/search/${inputValue.replace(' ', '+')}`, { replaceState: false });
+		inputValue = '';
 	}
 </script>
 
@@ -22,38 +22,40 @@
 </svelte:head>
 
 <nav
-	class="fixed flex w-full items-center justify-between bg-black/60 px-5 py-3 text-xl text-white backdrop-blur-sm"
+	class="fixed z-50 flex w-full items-center justify-between px-8 py-6 transition-all duration-300"
 >
-	<a href="/" draggable="false">
-		<span class="text-2xl font-extrabold tracking-tight text-white mx-3 lg:mx-0">
-			Film<span class="text-[#ffe0c2]">Hive</span>
+	<a href="/" draggable="false" class="group">
+		<span
+			class="text-2xl font-bold tracking-tighter text-white transition-opacity group-hover:opacity-80"
+		>
+			FilmHive
 		</span>
 	</a>
 
-	<div>
+	<div class="flex items-center gap-6">
+		<div class="relative hidden md:block">
 			<Input
 				type="text"
-				class="w-full rounded-full bg-transparent pl-5 text-foreground"
-				placeholder="E.g Avengers"
+				class="h-9 w-64 rounded-full border-white/20 bg-white/10 px-4 text-sm text-white placeholder:text-white/50 focus:border-white/40 focus:bg-white/20 focus:ring-0"
+				placeholder="Search movies..."
 				bind:value={inputValue}
 				onkeydown={(e) => e.key === 'Enter' && handleSearch()}
 			/>
-	</div>
-	<ul class="hidden gap-5 lg:flex items-center">
-		<a href="/">Home</a>
-		<a href="/contact	">Contact</a>
-		<a href="/about">About</a>
-		<a href="/help">Help</a>
-		<Button onclick={toggleMode} variant="outline" size="icon">
-			<SunIcon
-				class="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 !transition-all dark:scale-0 dark:-rotate-90"
-			/>
+		</div>
+
+		<Button
+			onclick={toggleMode}
+			variant="ghost"
+			size="icon"
+			class="text-white hover:bg-white/10 hover:text-white"
+		>
+			<SunIcon class="h-5 w-5 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
 			<MoonIcon
-				class="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 !transition-all dark:scale-100 dark:rotate-0"
+				class="absolute h-5 w-5 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0"
 			/>
 			<span class="sr-only">Toggle theme</span>
 		</Button>
-	</ul>
+	</div>
 </nav>
 
 <ModeWatcher />

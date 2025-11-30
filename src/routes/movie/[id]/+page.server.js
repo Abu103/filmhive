@@ -1,3 +1,4 @@
+import { TMDB_AUTH_KEY } from '$env/static/private';
 import { error } from '@sveltejs/kit';
 
 export async function load({ params, fetch }) {
@@ -5,10 +6,17 @@ export async function load({ params, fetch }) {
 
 	const res = await fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US`, {
 		headers: {
-			Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1ZjYyMjk3NTNkNTlkMWUzYTAzZWFlZmJlODk4ZGZkYiIsIm5iZiI6MTc1NTMyNTMwNy4wMTEwMDAyLCJzdWIiOiI2OGEwMjM3YjNjMzk3ZTFlNmJlZDExMzQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.UIjbWBDFgklKnpNxAhny63YhJF2NKfRL1JAeTQr7KgU',
+			Authorization: `Bearer ${TMDB_AUTH_KEY}`,
 			accept: 'application/json'
 		}
 	});
+
+	const rec = await fetch(`https://api.themoviedb.org/3/movie/${id}/recommendations`, {
+		headers: {
+			Authorization: `Bearer ${TMDB_AUTH_KEY}`,
+			accept: 'application/json'
+		}
+	})
 
 	if (!res.ok) {
 		console.error(`TMDB API Error ${res.status}: ${res.statusText}`);
@@ -16,6 +24,7 @@ export async function load({ params, fetch }) {
 	}
 
 	const movie = await res.json();
+	const recommendation = await rec.json();
 
-	return { movie };
+	return { movie, recommendation };
 }
