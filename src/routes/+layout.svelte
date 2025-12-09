@@ -22,7 +22,7 @@
 </svelte:head>
 
 <nav
-	class="fixed z-50 flex w-full items-center justify-between px-8 py-6 transition-all duration-300"
+	class="fixed z-50 flex w-full items-center justify-between px-8 py-6 transition-all duration-300 bg-black/30"
 >
 	<a href="/" draggable="false" class="group">
 		<span

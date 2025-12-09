@@ -11,7 +11,7 @@ export async function load({ params, fetch }) {
         }
     })
 
-    const recommendation = await fetch(`https://api.themoviedb.org/3/tv/${id}/recommendations?language=en-US&page=1`, {
+    const recommendation = await fetch(`https://api.themoviedb.org/3/tv/${id}/recommendations?language=en-US`, {
         method: "GET",
         headers: {
             Authorization: `Bearer ${TMDB_AUTH_KEY}`,
