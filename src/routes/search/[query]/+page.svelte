@@ -1,11 +1,11 @@
-<script>
+<script lang="ts">
 	import { goto } from '$app/navigation';
 
 	export let data;
 	let { movies } = data;
 
 	//@ts-ignore
-	function goToDetailpage(url) {
+	function goToDetailpage(url: number) {
 		goto(`/movie/${url}`, { replaceState: false });
 	}
 </script>
