@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { goto } from '$app/navigation';
 	import Badge from '$lib/components/ui/badge/badge.svelte';
 	import * as Carousel from '$lib/components/ui/carousel';
@@ -8,11 +8,13 @@
 	export let data;
 	$: TV = data.TV;
 	$: recommendation = data.recommendations;
-	// @ts-ignore
-	function goToDetailpage(url) {
-		loading = true;
-		goto(`/TV/${url}`, { replaceState: false });
-		loading = false;
+
+	function goToDetailpage(url: number, type: string) {
+		if (type === 'movie') {
+			goto(`/movie/${url}`, { replaceState: false });
+		} else if (type === 'tv') {
+			goto(`/series/${url}`, { replaceState: false });
+		}
 	}
 </script>
 
@@ -172,7 +174,7 @@
 							</div>
 							<button
 								class="absolute inset-0 h-full w-full cursor-pointer"
-								onclick={() => goToDetailpage(item.id)}
+								onclick={() => goToDetailpage(item.id, item.media_type)}
 								aria-label={`View ${item.name}`}
 							></button>
 						</div>

@@ -1,14 +1,16 @@
-<script>
+<script lang="ts">
 	import { goto } from '$app/navigation';
 	import * as Carousel from '$lib/components/ui/carousel';
-	//@ts-ignore
-	function goToDetailpage(url) {
+
+	function goToDetailpage(url: number) {
 		goto(`/movie/${url}`, { replaceState: false });
 	}
-	//@ts-ignore
-	function goToSeriesDetail(url) {
+	function goToSeriesDetail(url: number) {
 		goto(`/TV/${url}`, { replaceState: false });
 	}
+
+	
+	
 	export let data;
 	$: movies = data.movies;
 	$: populars = data.populars;
