@@ -2,6 +2,8 @@
 	import { goto } from '$app/navigation';
 	import Badge from '$lib/components/ui/badge/badge.svelte';
 	import * as Carousel from '$lib/components/ui/carousel';
+	import { Heart } from 'lucide-svelte';
+	import { onMount } from 'svelte';
 
 	$: loading = false;
 
@@ -9,11 +11,42 @@
 	$: TV = data.TV;
 	$: recommendation = data.recommendations;
 
+	let isFavorite = false;
+
+	function checkFavorite() {
+		if (typeof localStorage === 'undefined') return;
+		const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+		isFavorite = favorites.some((fav: any) => fav.id === TV.id && fav.type === 'tv');
+	}
+
+	function toggleFavorite() {
+		const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+		if (isFavorite) {
+			const newFavorites = favorites.filter((fav: any) => !(fav.id === TV.id && fav.type === 'tv'));
+			localStorage.setItem('favorites', JSON.stringify(newFavorites));
+		} else {
+			favorites.push({
+				id: TV.id,
+				type: 'tv',
+				title: TV.name, // Mapping 'name' to 'title' for consistency if listing them together later, or keep as name? I'll keep consistency where possible or just store what is there. Let's use 'title' for unified list rendering if needed, or store 'name' and handle it later. Let's store 'name' as well.
+				name: TV.name,
+				poster_path: TV.poster_path, // TV specific
+				overview: TV.overview,
+				first_air_date: TV.first_air_date,
+				vote_average: TV.vote_average
+			});
+			localStorage.setItem('favorites', JSON.stringify(favorites));
+		}
+		isFavorite = !isFavorite;
+	}
+
+	$: if (TV) checkFavorite();
+
 	function goToDetailpage(url: number, type: string) {
 		if (type === 'movie') {
 			goto(`/movie/${url}`, { replaceState: false });
 		} else if (type === 'tv') {
-			goto(`/series/${url}`, { replaceState: false });
+			goto(`/TV/${url}`, { replaceState: false });
 		}
 	}
 </script>
@@ -93,6 +126,16 @@
 							Website
 						</a>
 					{/if}
+
+					<button
+						onclick={toggleFavorite}
+						class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors {isFavorite
+							? 'bg-red-500 text-white hover:bg-red-600'
+							: 'bg-white/10 text-white backdrop-blur-sm hover:bg-white/20'}"
+					>
+						<Heart class="h-4 w-4 {isFavorite ? 'fill-current' : ''}" />
+						{isFavorite ? 'Saved' : 'Add to Favorites'}
+					</button>
 				</div>
 			</div>
 

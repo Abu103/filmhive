@@ -22,7 +22,7 @@
 </svelte:head>
 
 <nav
-	class="fixed z-50 flex w-full items-center justify-between px-8 py-6 transition-all duration-300 bg-black/30"
+	class="fixed z-50 flex w-full items-center justify-between bg-black/30 px-8 py-6 transition-all duration-300"
 >
 	<a href="/" draggable="false" class="group">
 		<span
@@ -33,6 +33,12 @@
 	</a>
 
 	<div class="flex items-center gap-6">
+		<a
+			href="/favorites"
+			class="text-sm font-medium text-white/70 transition-colors hover:text-white"
+		>
+			Favorites
+		</a>
 		<div class="relative hidden md:block">
 			<Input
 				type="text"

@@ -2,16 +2,50 @@
 	import Badge from '$lib/components/ui/badge/badge.svelte';
 	import * as Carousel from '$lib/components/ui/carousel';
 	import { goto } from '$app/navigation';
+	import { Heart } from 'lucide-svelte';
+	import { onMount } from 'svelte';
 
 	export let data;
 	$: movie = data.movie;
 	$: recommendation = data.recommendation;
 
+	let isFavorite = false;
+
+	function checkFavorite() {
+		if (typeof localStorage === 'undefined') return;
+		const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+		isFavorite = favorites.some((fav: any) => fav.id === movie.id && fav.type === 'movie');
+	}
+
+	function toggleFavorite() {
+		const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+		if (isFavorite) {
+			const newFavorites = favorites.filter(
+				(fav: any) => !(fav.id === movie.id && fav.type === 'movie')
+			);
+			localStorage.setItem('favorites', JSON.stringify(newFavorites));
+		} else {
+			favorites.push({
+				id: movie.id,
+				type: 'movie',
+				title: movie.title,
+				poster_path: movie.poster_path,
+				overview: movie.overview,
+				release_date: movie.release_date,
+				vote_average: movie.vote_average
+			});
+			localStorage.setItem('favorites', JSON.stringify(favorites));
+		}
+		isFavorite = !isFavorite;
+	}
+
+	$: if (movie) checkFavorite();
+
 	function goToDetailpage(url: number, type: string) {
 		if (type === 'movie') {
 			goto(`/movie/${url}`, { replaceState: false });
 		} else if (type === 'tv') {
-			goto(`/series/${url}`, { replaceState: false });
+			goto(`/TV/${url}`, { replaceState: false });
 		}
 	}
 </script>
@@ -100,6 +134,16 @@
 							Website
 						</a>
 					{/if}
+
+					<button
+						onclick={toggleFavorite}
+						class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors {isFavorite
+							? 'bg-red-500 text-white hover:bg-red-600'
+							: 'bg-white/10 text-white backdrop-blur-sm hover:bg-white/20'}"
+					>
+						<Heart class="h-4 w-4 {isFavorite ? 'fill-current' : ''}" />
+						{isFavorite ? 'Saved' : 'Add to Favorites'}
+					</button>
 				</div>
 			</div>
 
